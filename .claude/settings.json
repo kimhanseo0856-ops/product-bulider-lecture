@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "$git = 'C:\\Program Files\\Git\\cmd\\git.exe'; Set-Location 'C:\\python'; & $git add -A | Out-Null; & $git diff --cached --quiet; if ($LASTEXITCODE -ne 0) { & $git commit -m 'auto: update files' | Out-Null; & $git push origin main | Out-Null }",
+            "timeout": 60,
+            "statusMessage": "Syncing to GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}
