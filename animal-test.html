@@ -154,24 +154,23 @@
   const tabUpload = document.getElementById('tab-upload');
   const tabWebcam = document.getElementById('tab-webcam');
 
-  function emojiFor(name) {
-    const n = name.toLowerCase();
-    if (n.includes('dog') || name.includes('강아지')) return '🐶';
-    if (n.includes('cat') || name.includes('고양이')) return '🐱';
-    return '🐾';
+  // Teachable Machine 모델의 클래스 이름이 "Class 1"/"Class 2"로 되어 있어
+  // 학습시킨 순서(Class 1=강아지, Class 2=고양이)를 직접 매핑합니다.
+  const CLASS_MAP = {
+    'class 1': { emoji: '🐶', label: '강아지상', color: 'var(--dog)' },
+    'class 2': { emoji: '🐱', label: '고양이상', color: 'var(--cat)' }
+  };
+  function classInfo(name) {
+    const key = name.trim().toLowerCase();
+    if (CLASS_MAP[key]) return CLASS_MAP[key];
+    const n = key;
+    if (n.includes('dog') || name.includes('강아지')) return { emoji: '🐶', label: '강아지상', color: 'var(--dog)' };
+    if (n.includes('cat') || name.includes('고양이')) return { emoji: '🐱', label: '고양이상', color: 'var(--cat)' };
+    return { emoji: '🐾', label: name + '상', color: 'var(--btn-bg)' };
   }
-  function labelFor(name) {
-    const n = name.toLowerCase();
-    if (n.includes('dog') || name.includes('강아지')) return '강아지상';
-    if (n.includes('cat') || name.includes('고양이')) return '고양이상';
-    return name + '상';
-  }
-  function colorFor(name) {
-    const n = name.toLowerCase();
-    if (n.includes('dog') || name.includes('강아지')) return 'var(--dog)';
-    if (n.includes('cat') || name.includes('고양이')) return 'var(--cat)';
-    return 'var(--btn-bg)';
-  }
+  function emojiFor(name) { return classInfo(name).emoji; }
+  function labelFor(name) { return classInfo(name).label; }
+  function colorFor(name) { return classInfo(name).color; }
 
   async function loadModel() {
     const modelURL = URL_BASE + "model.json";
