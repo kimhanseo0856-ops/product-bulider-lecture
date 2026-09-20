@@ -98,6 +98,27 @@
       balls.appendChild(el);
     });
   });
+
+  // 다크모드 / 화이트모드 전환
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('theme-toggle');
+
+  function applyThemeIcon() {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+  }
+  applyThemeIcon();
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      root.removeAttribute('data-theme');
+    } else {
+      root.setAttribute('data-theme', 'dark');
+    }
+    try { localStorage.setItem('theme', isDark ? 'light' : 'dark'); } catch (e) {}
+    applyThemeIcon();
+  });
 </script>
 </body>
 </html>
