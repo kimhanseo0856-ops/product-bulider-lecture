@@ -144,6 +144,37 @@
   <p class="note"><a href="index.html">← 메인으로 돌아가기</a></p>
 </div>
 
+<div class="card content-card">
+  <h2>이 테스트는 어떻게 동작하나요?</h2>
+  <p>Google의 Teachable Machine으로 학습시킨 이미지 분류 AI 모델을 사용해 사진 속 인상이 강아지에 가까운지 고양이에 가까운지 확률로 보여주는 테스트입니다. 업로드한 사진이나 웹캠 화면은 사용자의 브라우저 안에서 곧바로 분석되며, 서버로 전송되거나 저장되지 않습니다.</p>
+  <p>AI의 재미있는 추론일 뿐 과학적·의학적 근거는 없으니 가볍게 즐겨 주세요.</p>
+
+  <h2>자주 묻는 질문</h2>
+  <div class="faq-item">
+    <p class="q">Q. 업로드한 사진이 서버에 저장되나요?</p>
+    <p class="a">A. 아니요. 모든 분석은 사용자의 브라우저(로컬 기기)에서 처리되며, 어떤 서버에도 사진이 전송되거나 저장되지 않습니다.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Q. 결과가 정확한가요?</p>
+    <p class="a">A. 소규모 이미지 데이터로 학습된 AI 모델의 결과이므로 재미로만 봐주세요. 정확한 관상 분석이나 전문적인 판단이 아닙니다.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Q. 웹캠은 왜 접근 권한을 요청하나요?</p>
+    <p class="a">A. 실시간으로 화면을 분석해 결과를 보여주기 위한 용도이며, 촬영된 영상은 저장되지 않고 분석 즉시 폐기됩니다.</p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <nav class="footer-nav">
+    <a href="index.html">홈</a>
+    <a href="animal-test.html">동물상 테스트</a>
+    <a href="contact.html">제휴 문의</a>
+    <a href="about.html">사이트 소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </nav>
+  <p class="footer-copy">© 2026 Product Builder Lecture</p>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 <script>
