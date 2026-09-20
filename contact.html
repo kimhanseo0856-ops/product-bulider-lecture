@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제휴 문의</title>
+<style>
+  :root {
+    --bg: #f4f6fb;
+    --card-bg: #fff;
+    --text: #222;
+    --sub: #777;
+    --note: #999;
+    --shadow: rgba(0,0,0,.08);
+    --btn-bg: #4f6df5;
+    --btn-text: #fff;
+    --toggle-bg: #e8eaf3;
+    --toggle-text: #444;
+    --input-bg: #f7f8fc;
+    --input-border: #dfe3ee;
+    --error: #e8504b;
+    --success: #2eb872;
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161f;
+    --card-bg: #1e2130;
+    --text: #eee;
+    --sub: #a3a7bd;
+    --note: #767a91;
+    --shadow: rgba(0,0,0,.4);
+    --btn-bg: #6c86ff;
+    --btn-text: #fff;
+    --toggle-bg: #2a2e42;
+    --toggle-text: #ddd;
+    --input-bg: #262a3d;
+    --input-border: #383d57;
+    --error: #ff7a72;
+    --success: #4fd897;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text); transition: background .2s, color .2s; }
+  .card { position: relative; background: var(--card-bg); width: 92%; max-width: 480px; padding: 40px 24px; border-radius: 20px; box-shadow: 0 12px 40px var(--shadow); text-align: center; transition: background .2s, box-shadow .2s; }
+  #theme-toggle { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--toggle-bg); color: var(--toggle-text); font-size: 18px; display: grid; place-items: center; cursor: pointer; transition: background .2s, transform .15s; }
+  #theme-toggle:hover { transform: scale(1.08); }
+  h1 { margin: 0 0 8px; font-size: 26px; }
+  p.sub { margin: 0 0 28px; color: var(--sub); font-size: 14px; }
+  form { text-align: left; display: flex; flex-direction: column; gap: 14px; }
+  label { font-size: 13px; font-weight: 700; color: var(--sub); margin-bottom: 4px; display: block; }
+  input, textarea { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text); font-size: 15px; font-family: inherit; transition: border-color .15s, background .2s, color .2s; }
+  input:focus, textarea:focus { outline: none; border-color: var(--btn-bg); }
+  textarea { resize: vertical; min-height: 110px; }
+  button#submit { margin-top: 6px; background: var(--btn-bg); color: var(--btn-text); border: 0; padding: 14px 32px; font-size: 16px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: transform .15s, background .2s, opacity .2s; }
+  button#submit:hover { transform: translateY(-2px); }
+  button#submit:active { transform: none; }
+  button#submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+  #status { margin-top: 4px; font-size: 14px; min-height: 20px; }
+  #status.error { color: var(--error); }
+  #status.success { color: var(--success); }
+  .note { margin-top: 24px; font-size: 13px; color: var(--note); }
+  .note a { color: var(--btn-bg); text-decoration: none; }
+</style>
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<div class="card">
+  <button id="theme-toggle" aria-label="다크모드 전환">🌙</button>
+  <h1>🤝 제휴 문의</h1>
+  <p class="sub">아래 정보를 남겨주시면 확인 후 빠르게 연락드릴게요</p>
+
+  <form id="contact-form">
+    <div>
+      <label for="name">이름 / 회사명</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="email">이메일</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="message">문의 내용</label>
+      <textarea id="message" name="message" placeholder="제휴 제안 내용을 자유롭게 작성해 주세요" required></textarea>
+    </div>
+    <button type="submit" id="submit">문의 보내기</button>
+    <p id="status"></p>
+  </form>
+
+  <p class="note"><a href="index.html">← 메인으로 돌아가기</a></p>
+</div>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('status');
+  const submitBtn = document.getElementById('submit');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    status.className = '';
+    status.textContent = '전송 중...';
+
+    try {
+      const res = await fetch('https://formspree.io/f/xqpaeqkq', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+
+      if (res.ok) {
+        status.className = 'success';
+        status.textContent = '문의가 정상적으로 접수되었습니다. 감사합니다!';
+        form.reset();
+      } else {
+        const data = await res.json().catch(() => null);
+        status.className = 'error';
+        status.textContent = (data && data.errors && data.errors.map(x => x.message).join(', ')) || '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      }
+    } catch (err) {
+      status.className = 'error';
+      status.textContent = '네트워크 오류로 전송에 실패했습니다.';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  // 다크모드 / 화이트모드 전환
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('theme-toggle');
+
+  function applyThemeIcon() {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+  }
+  applyThemeIcon();
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      root.removeAttribute('data-theme');
+    } else {
+      root.setAttribute('data-theme', 'dark');
+    }
+    try { localStorage.setItem('theme', isDark ? 'light' : 'dark'); } catch (e) {}
+    applyThemeIcon();
+  });
+</script>
+</body>
+</html>
