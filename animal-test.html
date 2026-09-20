@@ -199,9 +199,10 @@
       const pct = Math.round(p.probability * 100);
       const row = document.createElement('div');
       row.className = 'bar-row';
+      const info = classInfo(p.className);
       row.innerHTML = `
-        <div class="bar-label"><span>${emojiFor(p.className)} ${p.className}</span><span>${pct}%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:0%; background:${colorFor(p.className)}"></div></div>
+        <div class="bar-label"><span>${info.emoji} ${info.label.replace('상', '')}</span><span>${pct}%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%; background:${info.color}"></div></div>
       `;
       barsBox.appendChild(row);
       requestAnimationFrame(() => {
