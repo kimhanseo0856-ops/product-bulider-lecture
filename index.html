@@ -67,6 +67,24 @@
   <p class="note"><a href="contact.html" style="color: var(--btn-bg); text-decoration: none;">🤝 제휴 문의하기</a></p>
 </div>
 
+<div class="comments">
+  <div id="disqus_thread"></div>
+</div>
+
+<script>
+  var disqus_config = function () {
+    this.page.url = location.href;
+    this.page.identifier = location.pathname;
+  };
+  (function() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://productbuilder-uxxlxgjekc.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>댓글을 보려면 <a href="https://disqus.com/?ref_noscript">Disqus에서 JavaScript를 활성화</a>해 주세요.</noscript>
+
 <script>
   const balls = document.getElementById('balls');
 
