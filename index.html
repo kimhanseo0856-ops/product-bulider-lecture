@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>로또 번호 추천</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f4f6fb; font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: #222; }
+  .card { background: #fff; width: 92%; max-width: 480px; padding: 40px 24px; border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,.08); text-align: center; }
+  h1 { margin: 0 0 8px; font-size: 28px; }
+  p.sub { margin: 0 0 28px; color: #777; }
+  #balls { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; min-height: 56px; margin-bottom: 28px; }
+  .ball { width: 52px; height: 52px; border-radius: 50%; color: #fff; font-weight: 800; font-size: 20px; display: grid; place-items: center; box-shadow: inset -4px -4px 8px rgba(0,0,0,.2); animation: pop .35s ease both; }
+  @keyframes pop { from { transform: scale(0) rotate(-90deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  button { background: #4f6df5; color: #fff; border: 0; padding: 14px 32px; font-size: 18px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: transform .15s; }
+  button:hover { transform: translateY(-2px); }
+  button:active { transform: none; }
+  .note { margin-top: 24px; font-size: 13px; color: #999; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🍀 로또 번호 추천</h1>
+  <p class="sub">버튼을 누르면 1~45 중 6개의 번호를 뽑아드려요</p>
+  <div id="balls"></div>
+  <button id="btn">번호 뽑기</button>
+  <p class="note">재미로만 사용하세요. 모든 번호의 당첨 확률은 동일합니다.</p>
+</div>
+
+<script>
+  const balls = document.getElementById('balls');
+
+  // 번호 구간별 색상 (동행복권 스타일)
+  function color(n) {
+    if (n <= 10) return '#f2b705';
+    if (n <= 20) return '#3b8fe8';
+    if (n <= 30) return '#e8504b';
+    if (n <= 40) return '#7f8794';
+    return '#2eb872';
+  }
+
+  function pick() {
+    const pool = Array.from({ length: 45 }, (_, i) => i + 1);
+    const result = [];
+    for (let i = 0; i < 6; i++) {
+      const idx = Math.floor(Math.random() * pool.length);
+      result.push(pool.splice(idx, 1)[0]);
+    }
+    return result.sort((a, b) => a - b);
+  }
+
+  document.getElementById('btn').addEventListener('click', () => {
+    balls.innerHTML = '';
+    pick().forEach((n, i) => {
+      const el = document.createElement('div');
+      el.className = 'ball';
+      el.textContent = n;
+      el.style.background = color(n);
+      el.style.animationDelay = (i * 0.12) + 's';
+      balls.appendChild(el);
+    });
+  });
+</script>
+</body>
+</html>
