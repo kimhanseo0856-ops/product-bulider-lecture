@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="google-adsense-account" content="ca-pub-9933027289167186">
-<meta name="description" content="1부터 45까지 숫자 중 6개를 무작위로 뽑아주는 로또 번호 추천 도구입니다. 재미로 즐기는 무료 번호 생성기이며 실제 당첨과는 무관합니다.">
-<title>로또 번호 추천</title>
+<meta name="description" content="7개의 질문에 답하면 나의 연애 성향과 가장 잘 맞는 이상형 캐릭터를 보여주는 무료 심리 테스트입니다. 결과는 브라우저에서만 계산되며 저장되지 않습니다.">
+<title>이상형 테스트 | 나와 찰떡궁합인 이상형은?</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9933027289167186"
      crossorigin="anonymous"></script>
 <style>
@@ -20,6 +20,11 @@
     --btn-text: #fff;
     --toggle-bg: #e8eaf3;
     --toggle-text: #444;
+    --panel-bg: #f7f8fc;
+    --panel-border: #dfe3ee;
+    --bar-track: #e8eaf3;
+    --pink: #ff6f9c;
+    --accent2: #ffb648;
   }
   :root[data-theme="dark"] {
     --bg: #14161f;
@@ -32,6 +37,11 @@
     --btn-text: #fff;
     --toggle-bg: #2a2e42;
     --toggle-text: #ddd;
+    --panel-bg: #262a3d;
+    --panel-border: #383d57;
+    --bar-track: #2a2e42;
+    --pink: #ff8fb3;
+    --accent2: #ffc670;
   }
   * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px 0; background: var(--bg); font-family: 'Pretendard', 'Noto Sans KR', sans-serif; color: var(--text); transition: background .2s, color .2s; }
@@ -39,15 +49,52 @@
   .comments { width: 92%; max-width: 480px; background: var(--card-bg); padding: 24px; border-radius: 20px; box-shadow: 0 12px 40px var(--shadow); transition: background .2s, box-shadow .2s; }
   #theme-toggle { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--toggle-bg); color: var(--toggle-text); font-size: 18px; display: grid; place-items: center; cursor: pointer; transition: background .2s, transform .15s; }
   #theme-toggle:hover { transform: scale(1.08); }
-  h1 { margin: 0 0 8px; font-size: 28px; }
-  p.sub { margin: 0 0 28px; color: var(--sub); }
-  #balls { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; min-height: 56px; margin-bottom: 28px; }
-  .ball { width: 52px; height: 52px; border-radius: 50%; color: #fff; font-weight: 800; font-size: 20px; display: grid; place-items: center; box-shadow: inset -4px -4px 8px rgba(0,0,0,.2); animation: pop .35s ease both; }
-  @keyframes pop { from { transform: scale(0) rotate(-90deg); opacity: 0; } to { transform: none; opacity: 1; } }
-  button#btn { background: var(--btn-bg); color: var(--btn-text); border: 0; padding: 14px 32px; font-size: 18px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: transform .15s, background .2s; }
-  button#btn:hover { transform: translateY(-2px); }
-  button#btn:active { transform: none; }
-  .note { margin-top: 24px; font-size: 13px; color: var(--note); }
+  h1 { margin: 0 0 8px; font-size: 26px; }
+  p.sub { margin: 0 0 24px; color: var(--sub); font-size: 14px; }
+
+  /* progress */
+  .progress-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .progress-track { flex: 1; height: 8px; border-radius: 6px; background: var(--bar-track); overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--btn-bg), var(--pink)); border-radius: 6px; transition: width .35s ease; }
+  .progress-label { font-size: 12px; color: var(--sub); font-weight: 700; white-space: nowrap; }
+
+  /* intro */
+  .intro-emoji { font-size: 54px; margin-bottom: 6px; }
+  .start-btn { background: linear-gradient(90deg, var(--btn-bg), var(--pink)); color: #fff; border: 0; padding: 15px 36px; font-size: 17px; font-weight: 800; border-radius: 14px; cursor: pointer; transition: transform .15s; }
+  .start-btn:hover { transform: translateY(-2px); }
+  .intro-meta { display: flex; justify-content: center; gap: 16px; margin: 18px 0 6px; font-size: 12px; color: var(--sub); }
+
+  /* question */
+  .q-text { font-size: 19px; font-weight: 800; margin: 0 0 20px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn { text-align: left; background: var(--panel-bg); border: 1px solid var(--panel-border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 15px; cursor: pointer; transition: border-color .15s, background .2s, transform .1s; }
+  .opt-btn:hover { border-color: var(--btn-bg); transform: translateY(-1px); }
+  .opt-btn:active { transform: none; }
+  .back-link { display: inline-block; margin-top: 18px; font-size: 13px; color: var(--sub); background: none; border: 0; cursor: pointer; text-decoration: underline; }
+
+  /* result */
+  .avatar { width: 132px; height: 132px; border-radius: 50%; margin: 0 auto 16px; display: grid; place-items: center; font-size: 58px; box-shadow: 0 10px 30px var(--shadow); animation: pop .4s ease both; }
+  @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: none; opacity: 1; } }
+  .match-pct { font-size: 14px; font-weight: 800; color: var(--pink); margin-bottom: 2px; }
+  .result-name { font-size: 24px; font-weight: 800; margin: 0 0 4px; }
+  .result-tag { display: inline-block; font-size: 13px; font-weight: 700; color: var(--btn-bg); background: var(--panel-bg); padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .result-desc { font-size: 14px; line-height: 1.7; color: var(--sub); text-align: left; margin: 0 0 20px; }
+
+  .axes { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .axis-row { text-align: left; }
+  .axis-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--sub); margin-bottom: 4px; }
+  .axis-track { width: 100%; height: 8px; border-radius: 6px; background: var(--bar-track); overflow: hidden; }
+  .axis-fill { height: 100%; border-radius: 6px; width: 0%; background: linear-gradient(90deg, var(--btn-bg), var(--pink)); transition: width .6s ease; }
+
+  .result-actions { display: flex; gap: 10px; }
+  .action-btn { flex: 1; background: var(--btn-bg); color: var(--btn-text); border: 0; padding: 13px; font-size: 15px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: transform .15s, background .2s; }
+  .action-btn:hover { transform: translateY(-2px); }
+  .action-btn.secondary { background: var(--panel-bg); color: var(--text); border: 1px solid var(--panel-border); }
+
+  .note { margin-top: 22px; font-size: 13px; color: var(--note); }
+  .note a { color: var(--btn-bg); text-decoration: none; }
+  .hidden { display: none !important; }
+
   .content-card { text-align: left; }
   .content-card h2 { font-size: 17px; margin: 0 0 10px; }
   .content-card h2:not(:first-child) { margin-top: 22px; }
@@ -75,32 +122,65 @@
 
 <div class="card">
   <button id="theme-toggle" aria-label="다크모드 전환">🌙</button>
-  <h1>🍀 로또 번호 추천</h1>
-  <p class="sub">버튼을 누르면 1~45 중 6개의 번호를 뽑아드려요</p>
-  <div id="balls"></div>
-  <button id="btn">번호 뽑기</button>
-  <p class="note">🎲 재미로만 사용하세요. 실제 복권 추첨·판매와는 무관하며, 어떤 번호를 뽑아도 당첨 확률은 동일합니다.</p>
-  <p class="note"><a href="contact.html" style="color: var(--btn-bg); text-decoration: none;">🤝 제휴 문의하기</a></p>
-  <p class="note"><a href="animal-test.html" style="color: var(--btn-bg); text-decoration: none;">🐶🐱 강아지상 고양이상 테스트</a></p>
+
+  <!-- INTRO -->
+  <div id="view-intro">
+    <div class="intro-emoji">💘</div>
+    <h1>이상형 테스트</h1>
+    <p class="sub">7개의 질문에 답하면 나와 찰떡궁합인 이상형 캐릭터를 알려드려요</p>
+    <button class="start-btn" id="start-btn">테스트 시작하기</button>
+    <div class="intro-meta">
+      <span>⏱️ 1분 소요</span>
+      <span>❓ 질문 7개</span>
+      <span>👥 결과 10종</span>
+    </div>
+    <p class="note"><a href="animal-test.html">🐶🐱 강아지상 고양이상 테스트도 해보기</a></p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="view-quiz" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-label" id="progress-label">1/8</div>
+    </div>
+    <p class="q-text" id="q-text"></p>
+    <div class="options" id="q-options"></div>
+    <button class="back-link" id="back-btn">← 이전 질문</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="view-result" class="hidden">
+    <div class="match-pct" id="match-pct"></div>
+    <div class="avatar" id="result-avatar"></div>
+    <h2 class="result-name" id="result-name"></h2>
+    <div class="result-tag" id="result-tag"></div>
+    <p class="result-desc" id="result-desc"></p>
+    <div class="axes" id="result-axes"></div>
+    <div class="result-actions">
+      <button class="action-btn secondary" id="retry-btn">다시 테스트하기</button>
+      <button class="action-btn" id="share-btn">결과 복사하기</button>
+    </div>
+    <p class="note" id="share-status"></p>
+  </div>
 </div>
 
-<div class="card content-card">
-  <h2>로또 번호 추천이란?</h2>
-  <p>이 도구는 1부터 45까지의 숫자 중 서로 다른 6개를 브라우저에서 즉시 무작위로 뽑아 보여주는 무료 번호 생성기입니다. 실제 복권 판매·구매·당첨 확인 기능은 제공하지 않으며, 동행복권 등 공식 복권 사업자와는 아무런 관련이 없습니다.</p>
-  <p>번호는 매번 새로 뽑을 때마다 서버가 아닌 사용자의 브라우저에서 즉석으로 계산되며, 별도로 저장되거나 다른 곳으로 전송되지 않습니다.</p>
+<div id="content-section" class="card content-card">
+  <h2>이상형 테스트란?</h2>
+  <p>연애 성향, 데이트 스타일, 끌리는 분위기에 대한 7가지 질문에 답하면 4가지 매력 축(활동성·다정함·분위기·스타일)을 기준으로 가장 가까운 이상형 캐릭터를 매칭해주는 심리 테스트입니다. 모든 계산은 사용자의 브라우저에서 즉시 이루어지며, 답변 내용은 서버로 전송되거나 저장되지 않습니다.</p>
+  <p>현재 매칭 결과로 등장하는 캐릭터는 모두 <strong>가상으로 만든 설정 캐릭터</strong>이며, 실존하는 연예인·인플루언서와는 무관합니다.</p>
 
   <h2>자주 묻는 질문</h2>
   <div class="faq-item">
-    <p class="q">Q. 이 번호를 사면 당첨 확률이 높아지나요?</p>
-    <p class="a">A. 아니요. 로또는 완전한 무작위 추첨이므로 어떤 방식으로 번호를 고르더라도 당첨 확률은 동일합니다. 이 사이트는 번호 선택의 재미를 위한 도구일 뿐입니다.</p>
+    <p class="q">Q. 결과에 나오는 인물은 실제 존재하나요?</p>
+    <p class="a">A. 아니요. 현재는 재미를 위해 만든 가상 캐릭터입니다. 실제 인물 기반 매칭은 추후 업데이트될 수 있습니다.</p>
   </div>
   <div class="faq-item">
-    <p class="q">Q. 이 사이트에서 복권을 구매할 수 있나요?</p>
-    <p class="a">A. 아니요. 결제나 구매 기능은 전혀 없으며, 단순히 숫자를 무작위로 보여주는 도구입니다.</p>
+    <p class="q">Q. 답변이 저장되거나 다른 곳에 전송되나요?</p>
+    <p class="a">A. 아니요. 모든 계산은 브라우저 안에서만 이루어지며, 별도로 저장되지 않습니다.</p>
   </div>
   <div class="faq-item">
-    <p class="q">Q. 뽑은 번호가 어딘가에 저장되나요?</p>
-    <p class="a">A. 아니요. 모든 계산은 사용자의 브라우저 안에서만 이루어지며 서버에 저장되지 않습니다.</p>
+    <p class="q">Q. 결과가 과학적으로 검증된 건가요?</p>
+    <p class="a">A. 아니요. 간단한 설문 기반의 재미용 콘텐츠이며 심리학적·과학적 근거는 없습니다.</p>
   </div>
 </div>
 
@@ -134,56 +214,253 @@
 <noscript>댓글을 보려면 <a href="https://disqus.com/?ref_noscript">Disqus에서 JavaScript를 활성화</a>해 주세요.</noscript>
 
 <script>
-  const balls = document.getElementById('balls');
+  // ---------- 축(axis) 정의 ----------
+  // energy: 차분함(0) ~ 활발함(10)
+  // warmth: 시크함(0) ~ 다정함(10)
+  // mood:   청순함(0) ~ 화려함(10)
+  // vibe:   편안함(0) ~ 세련됨(10)
+  const AXES = ['energy', 'warmth', 'mood', 'vibe'];
+  const AXIS_LABEL = {
+    energy: ['차분함', '활발함'],
+    warmth: ['시크함', '다정함'],
+    mood:   ['청순함', '화려함'],
+    vibe:   ['편안함', '세련됨']
+  };
 
-  // 번호 구간별 색상 (동행복권 스타일)
-  function color(n) {
-    if (n <= 10) return '#f2b705';
-    if (n <= 20) return '#3b8fe8';
-    if (n <= 30) return '#e8504b';
-    if (n <= 40) return '#7f8794';
-    return '#2eb872';
-  }
+  // ---------- 가상 캐릭터 풀 (실존 인물 아님) ----------
+  const CHARACTERS = [
+    { gender: 'f', name: '이하늘', tag: '청량 에너지 만렙', emoji: '🌤️', grad: ['#6fc3ff', '#4f6df5'],
+      desc: '함께 있으면 없던 힘도 생기는, 밝고 씩씩한 매력의 소유자. 야외 활동과 운동을 좋아하고 솔직한 리액션으로 분위기를 살려줘요.',
+      v: { energy: 9, warmth: 7, mood: 2, vibe: 3 } },
+    { gender: 'f', name: '강시온', tag: '시크 모델 무드', emoji: '💫', grad: ['#8a7dff', '#2b2b44'],
+      desc: '말수는 적지만 눈빛으로 다 말하는 도도한 매력. 겉보기엔 차가워 보여도 가까워지면 은근히 잘 챙겨주는 반전 있는 스타일이에요.',
+      v: { energy: 4, warmth: 3, mood: 7, vibe: 9 } },
+    { gender: 'f', name: '박수아', tag: '청순 힐링 매력', emoji: '🌿', grad: ['#8fe3c0', '#3aa07a'],
+      desc: '있는 그대로 편안한, 자연스러운 매력이 돋보이는 타입. 조용한 카페에서 도란도란 대화하는 걸 좋아하고 마음이 따뜻해요.',
+      v: { energy: 3, warmth: 8, mood: 1, vibe: 2 } },
+    { gender: 'f', name: '최유나', tag: '발랄 큐티 인플루언서', emoji: '🎀', grad: ['#ff9ec4', '#ff5f96'],
+      desc: '텐션 높고 리액션 부자! 어디서든 분위기 메이커가 되는 밝은 에너지의 소유자. 함께 있으면 심심할 틈이 없어요.',
+      v: { energy: 8, warmth: 9, mood: 4, vibe: 5 } },
+    { gender: 'f', name: '오세라', tag: '글래머 섹시 아이콘', emoji: '🔥', grad: ['#ff7a6b', '#e0a63e'],
+      desc: '자신감 넘치고 매혹적인 분위기의 소유자. 화려한 스타일을 즐기며 함께 있는 사람을 특별하게 만들어주는 타입이에요.',
+      v: { energy: 6, warmth: 4, mood: 9, vibe: 8 } },
+    { gender: 'm', name: '정도윤', tag: '반전 매력 훈남', emoji: '😊', grad: ['#ffb87a', '#ff7d5c'],
+      desc: '첫인상은 무뚝뚝해 보여도 알고 보면 은근히 다정한 반전 매력. 챙길 땐 확실하게 챙기는 믿음직한 스타일이에요.',
+      v: { energy: 6, warmth: 8, mood: 3, vibe: 4 } },
+    { gender: 'm', name: '한지호', tag: '시크 지적 무드', emoji: '🖤', grad: ['#7c8ba1', '#232838'],
+      desc: '차분하고 사색적인 분위기, 대화할수록 매력이 드러나는 타입. 감정 표현은 적지만 은근한 배려가 느껴져요.',
+      v: { energy: 3, warmth: 3, mood: 6, vibe: 9 } },
+    { gender: 'm', name: '김태경', tag: '다정한 옆집 오빠상', emoji: '☀️', grad: ['#ffd76a', '#ff9f4a'],
+      desc: '편안하고 다정한, 옆에 있으면 마음이 놓이는 타입. 사소한 것까지 잘 챙겨주는 세심함이 매력 포인트예요.',
+      v: { energy: 5, warmth: 9, mood: 2, vibe: 3 } },
+    { gender: 'm', name: '서준혁', tag: '터프가이 상남자', emoji: '💪', grad: ['#8b98a5', '#cc4e4e'],
+      desc: '직진하는 스타일, 확실한 리드로 안정감을 주는 상남자 매력. 액티비티나 스포츠를 함께 즐기기 좋은 타입이에요.',
+      v: { energy: 8, warmth: 5, mood: 7, vibe: 6 } },
+    { gender: 'm', name: '윤이든', tag: '감성 아티스트 무드', emoji: '🎨', grad: ['#7ad0c9', '#8f7bd1'],
+      desc: '감성적이고 자유로운 분위기의 소유자. 특별한 데이트보다 함께 있는 순간 자체를 의미 있게 만들어주는 타입이에요.',
+      v: { energy: 4, warmth: 6, mood: 5, vibe: 7 } }
+  ];
 
-  function pick() {
-    const pool = Array.from({ length: 45 }, (_, i) => i + 1);
-    const result = [];
-    for (let i = 0; i < 6; i++) {
-      const idx = Math.floor(Math.random() * pool.length);
-      result.push(pool.splice(idx, 1)[0]);
-    }
-    return result.sort((a, b) => a - b);
-  }
+  // ---------- 질문 (Q0: 성별 필터 / Q1~7: 성향 채점) ----------
+  const QUESTIONS = [
+    { text: '어떤 성별의 이상형 결과를 보고 싶으신가요?', filter: true,
+      options: [
+        { label: '여성형 캐릭터', value: 'f' },
+        { label: '남성형 캐릭터', value: 'm' },
+        { label: '둘 다 상관없어요', value: 'all' }
+      ] },
+    { text: '주말에 가장 끌리는 데이트는?',
+      options: [
+        { label: '한강에서 자전거 타고 피크닉', v: { energy: 9, warmth: 6, mood: 2, vibe: 3 } },
+        { label: '감성 카페 투어하며 사진 찍기', v: { energy: 4, warmth: 5, mood: 4, vibe: 7 } },
+        { label: '집에서 영화 보며 뒹굴뒹굴', v: { energy: 2, warmth: 7, mood: 2, vibe: 2 } },
+        { label: '힙한 루프탑 바에서 야경 보기', v: { energy: 6, warmth: 4, mood: 7, vibe: 9 } }
+      ] },
+    { text: '이상형의 첫인상이라면?',
+      options: [
+        { label: '활기차고 에너지 넘치는 사람', v: { energy: 9, warmth: 6, mood: 4, vibe: 5 } },
+        { label: '차분하고 여유로운 사람', v: { energy: 2, warmth: 5, mood: 3, vibe: 6 } },
+        { label: '다정하고 따뜻한 사람', v: { energy: 5, warmth: 9, mood: 2, vibe: 3 } },
+        { label: '도도하고 시크한 사람', v: { energy: 4, warmth: 2, mood: 6, vibe: 8 } }
+      ] },
+    { text: '이상형과의 연락 스타일은?',
+      options: [
+        { label: '하루 종일 시시콜콜 다 공유', v: { energy: 6, warmth: 9, mood: 2, vibe: 3 } },
+        { label: '적당히, 필요할 때 편하게', v: { energy: 4, warmth: 4, mood: 4, vibe: 5 } },
+        { label: '자주는 아니어도 만나면 화끈하게', v: { energy: 7, warmth: 3, mood: 8, vibe: 6 } },
+        { label: '무심한 듯 은근히 챙겨주는 스타일', v: { energy: 3, warmth: 5, mood: 5, vibe: 7 } }
+      ] },
+    { text: '끌리는 옷 스타일은?',
+      options: [
+        { label: '편안한 캐주얼 / 스포티룩', v: { energy: 8, warmth: 6, mood: 1, vibe: 2 } },
+        { label: '청순하고 내추럴한 느낌', v: { energy: 3, warmth: 7, mood: 1, vibe: 3 } },
+        { label: '블랙 위주의 시크한 스타일', v: { energy: 4, warmth: 3, mood: 6, vibe: 9 } },
+        { label: '화려하고 개성 강한 스타일', v: { energy: 6, warmth: 4, mood: 9, vibe: 8 } }
+      ] },
+    { text: '갈등이 생겼을 때 이상형의 대처는?',
+      options: [
+        { label: '바로 솔직하게 다 얘기하고 푼다', v: { energy: 6, warmth: 7, mood: 3, vibe: 4 } },
+        { label: '시간을 두고 차분하게 정리한다', v: { energy: 2, warmth: 4, mood: 3, vibe: 6 } },
+        { label: '장난스럽게 풀어주며 분위기 전환', v: { energy: 8, warmth: 8, mood: 3, vibe: 4 } },
+        { label: '쿨하게 넘기고 여지를 안 둔다', v: { energy: 4, warmth: 2, mood: 6, vibe: 7 } }
+      ] },
+    { text: '함께 있을 때 가장 설레는 순간은?',
+      options: [
+        { label: '같이 땀 흘리며 운동/액티비티 할 때', v: { energy: 9, warmth: 5, mood: 4, vibe: 4 } },
+        { label: '눈 마주치고 조용히 대화할 때', v: { energy: 2, warmth: 7, mood: 3, vibe: 5 } },
+        { label: '예쁘게 꾸미고 나가 데이트할 때', v: { energy: 5, warmth: 4, mood: 8, vibe: 7 } },
+        { label: '나를 웃겨줄 때', v: { energy: 7, warmth: 8, mood: 2, vibe: 3 } }
+      ] },
+    { text: '나에게 가장 중요한 이상형의 매력은?',
+      options: [
+        { label: '건강하고 활동적인 에너지', v: { energy: 10, warmth: 5, mood: 3, vibe: 4 } },
+        { label: '따뜻하고 다정한 마음', v: { energy: 4, warmth: 10, mood: 2, vibe: 3 } },
+        { label: '섹시하고 매혹적인 분위기', v: { energy: 5, warmth: 3, mood: 10, vibe: 7 } },
+        { label: '세련되고 도시적인 감각', v: { energy: 4, warmth: 3, mood: 5, vibe: 10 } }
+      ] }
+  ];
 
-  document.getElementById('btn').addEventListener('click', () => {
-    balls.innerHTML = '';
-    pick().forEach((n, i) => {
-      const el = document.createElement('div');
-      el.className = 'ball';
-      el.textContent = n;
-      el.style.background = color(n);
-      el.style.animationDelay = (i * 0.12) + 's';
-      balls.appendChild(el);
+  let step = 0;
+  let genderFilter = 'all';
+  const answerVecs = [];
+
+  const viewIntro = document.getElementById('view-intro');
+  const viewQuiz = document.getElementById('view-quiz');
+  const viewResult = document.getElementById('view-result');
+  const startBtn = document.getElementById('start-btn');
+  const backBtn = document.getElementById('back-btn');
+  const qText = document.getElementById('q-text');
+  const qOptions = document.getElementById('q-options');
+  const progressFill = document.getElementById('progress-fill');
+  const progressLabel = document.getElementById('progress-label');
+
+  function renderQuestion() {
+    const q = QUESTIONS[step];
+    progressFill.style.width = Math.round((step / QUESTIONS.length) * 100) + '%';
+    progressLabel.textContent = (step + 1) + '/' + QUESTIONS.length;
+    qText.textContent = q.text;
+    qOptions.innerHTML = '';
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = opt.label;
+      btn.addEventListener('click', () => selectOption(opt));
+      qOptions.appendChild(btn);
     });
+    backBtn.style.visibility = step === 0 ? 'hidden' : 'visible';
+  }
+
+  function selectOption(opt) {
+    if (QUESTIONS[step].filter) {
+      genderFilter = opt.value;
+    } else {
+      answerVecs.push(opt.v);
+    }
+    step++;
+    if (step >= QUESTIONS.length) {
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  backBtn.addEventListener('click', () => {
+    if (step === 0) return;
+    step--;
+    if (!QUESTIONS[step].filter) answerVecs.pop();
+    renderQuestion();
+  });
+
+  startBtn.addEventListener('click', () => {
+    viewIntro.classList.add('hidden');
+    viewQuiz.classList.remove('hidden');
+    renderQuestion();
+  });
+
+  function computeUserVector() {
+    const sum = { energy: 0, warmth: 0, mood: 0, vibe: 0 };
+    answerVecs.forEach(v => AXES.forEach(a => sum[a] += v[a]));
+    const n = answerVecs.length || 1;
+    const avg = {};
+    AXES.forEach(a => avg[a] = sum[a] / n);
+    return avg;
+  }
+
+  function distance(a, b) {
+    return Math.sqrt(AXES.reduce((s, k) => s + Math.pow(a[k] - b[k], 2), 0));
+  }
+
+  function showResult() {
+    const userVec = computeUserVector();
+    const pool = genderFilter === 'all' ? CHARACTERS : CHARACTERS.filter(c => c.gender === genderFilter);
+    let best = pool[0], bestDist = Infinity;
+    pool.forEach(c => {
+      const d = distance(userVec, c.v);
+      if (d < bestDist) { bestDist = d; best = c; }
+    });
+    const pct = Math.max(40, Math.min(99, Math.round(100 - bestDist * 4)));
+
+    document.getElementById('match-pct').textContent = '💘 매칭률 ' + pct + '%';
+    const avatar = document.getElementById('result-avatar');
+    avatar.textContent = best.emoji;
+    avatar.style.background = `linear-gradient(135deg, ${best.grad[0]}, ${best.grad[1]})`;
+    document.getElementById('result-name').textContent = best.name;
+    document.getElementById('result-tag').textContent = best.tag;
+    document.getElementById('result-desc').textContent = best.desc;
+
+    const axesBox = document.getElementById('result-axes');
+    axesBox.innerHTML = '';
+    AXES.forEach(a => {
+      const pctVal = Math.round((userVec[a] / 10) * 100);
+      const row = document.createElement('div');
+      row.className = 'axis-row';
+      row.innerHTML = `
+        <div class="axis-label"><span>${AXIS_LABEL[a][0]}</span><span>${AXIS_LABEL[a][1]}</span></div>
+        <div class="axis-track"><div class="axis-fill" style="width:0%"></div></div>
+      `;
+      axesBox.appendChild(row);
+      requestAnimationFrame(() => { row.querySelector('.axis-fill').style.width = pctVal + '%'; });
+    });
+
+    viewQuiz.classList.add('hidden');
+    viewResult.classList.remove('hidden');
+  }
+
+  document.getElementById('retry-btn').addEventListener('click', () => {
+    step = 0;
+    genderFilter = 'all';
+    answerVecs.length = 0;
+    document.getElementById('share-status').textContent = '';
+    viewResult.classList.add('hidden');
+    viewIntro.classList.remove('hidden');
+  });
+
+  document.getElementById('share-btn').addEventListener('click', async () => {
+    const name = document.getElementById('result-name').textContent;
+    const tag = document.getElementById('result-tag').textContent;
+    const pct = document.getElementById('match-pct').textContent;
+    const text = `[이상형 테스트] 나의 이상형은 "${name}" (${tag}) - ${pct}\n${location.href}`;
+    const statusEl = document.getElementById('share-status');
+    try {
+      await navigator.clipboard.writeText(text);
+      statusEl.textContent = '결과가 클립보드에 복사되었어요!';
+    } catch (e) {
+      statusEl.textContent = text;
+    }
   });
 
   // 다크모드 / 화이트모드 전환
   const root = document.documentElement;
   const themeToggle = document.getElementById('theme-toggle');
-
   function applyThemeIcon() {
     const isDark = root.getAttribute('data-theme') === 'dark';
     themeToggle.textContent = isDark ? '☀️' : '🌙';
   }
   applyThemeIcon();
-
   themeToggle.addEventListener('click', () => {
     const isDark = root.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      root.removeAttribute('data-theme');
-    } else {
-      root.setAttribute('data-theme', 'dark');
-    }
+    if (isDark) root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', 'dark');
     try { localStorage.setItem('theme', isDark ? 'light' : 'dark'); } catch (e) {}
     applyThemeIcon();
   });
