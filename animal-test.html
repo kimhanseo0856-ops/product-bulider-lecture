@@ -87,7 +87,10 @@
   .content-card { text-align: left; }
   .content-card h2 { font-size: 17px; margin: 0 0 10px; }
   .content-card h2:not(:first-child) { margin-top: 22px; }
-  .content-card p { font-size: 14px; line-height: 1.6; color: var(--sub); margin: 0 0 6px; }
+  .content-card p { font-size: 14px; line-height: 1.75; color: var(--sub); margin: 0 0 10px; }
+  .content-card ul, .content-card ol { margin: 0 0 10px; padding-left: 20px; }
+  .content-card li { font-size: 14px; line-height: 1.7; color: var(--sub); margin-bottom: 6px; }
+  .content-card a { color: var(--btn-bg); text-decoration: none; }
   .faq-item { margin-bottom: 14px; }
   .faq-item .q { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
   .faq-item .a { font-size: 13px; line-height: 1.6; color: var(--sub); margin: 0; }
@@ -149,6 +152,33 @@
   <p>Google의 Teachable Machine으로 학습시킨 이미지 분류 AI 모델을 사용해 사진 속 인상이 강아지에 가까운지 고양이에 가까운지 확률로 보여주는 테스트입니다. 업로드한 사진이나 웹캠 화면은 사용자의 브라우저 안에서 곧바로 분석되며, 서버로 전송되거나 저장되지 않습니다.</p>
   <p>AI의 재미있는 추론일 뿐 과학적·의학적 근거는 없으니 가볍게 즐겨 주세요.</p>
 
+  <h2>이용 방법</h2>
+  <ol>
+    <li>버튼이 '결과 확인하기'로 바뀔 때까지 잠시 기다려 주세요. AI 모델을 불러오는 중에는 '모델 로딩 중'이 표시됩니다.</li>
+    <li>'사진 업로드' 탭에서 사진을 선택하거나 끌어다 놓으면 미리보기가 나타납니다. 웹캠을 쓰고 싶다면 '웹캠 촬영' 탭에서 카메라 접근을 허용해 주세요.</li>
+    <li>결과 확인 버튼을 누르면 강아지상과 고양이상의 비율이 막대 그래프로 표시됩니다.</li>
+    <li>다른 사진으로 다시 해 보거나, 웹캠으로 표정을 바꿔 보며 결과가 어떻게 달라지는지 관찰해 보세요.</li>
+  </ol>
+
+  <h2>더 좋은 결과를 얻는 사진 팁</h2>
+  <ul>
+    <li>얼굴이 화면 가운데에 크게 나오는 정면 사진이 가장 안정적으로 분석됩니다.</li>
+    <li>밝고 균일한 조명에서 찍은 사진을 사용하세요. 강한 그림자나 역광은 결과를 흔들 수 있습니다.</li>
+    <li>선글라스, 마스크, 심한 필터가 적용된 사진은 분석이 어려울 수 있습니다.</li>
+    <li>같은 사람이라도 웃는 사진과 무표정 사진의 결과가 다를 수 있으니 여러 장을 비교해 보세요.</li>
+  </ul>
+
+  <h2>결과 이해하기</h2>
+  <p>결과의 퍼센트는 AI가 학습한 예시들과 비교했을 때 사진이 각 유형에 얼마나 가까워 보이는지를 나타냅니다. 예를 들어 강아지 60%, 고양이 40%라면 '강아지상 쪽 인상이 조금 더 강하다' 정도의 의미이며, 두 가지 인상을 모두 가지고 있다고 해석해도 좋습니다. 이는 외모나 성격에 대한 평가가 아닙니다.</p>
+
+  <h2>더 읽어보기</h2>
+  <ul>
+    <li><a href="article-dog-cat-face.html">강아지상·고양이상이란? 유래와 인상의 특징</a></li>
+    <li><a href="article-image-ai-basics.html">이미지 분류 AI의 원리: Teachable Machine 쉽게 이해하기</a></li>
+    <li><a href="article-privacy-webapp.html">내 사진은 어디로 갈까? 브라우저 안에서만 동작하는 웹앱 확인법</a></li>
+    <li><a href="articles.html">읽을거리 전체 보기 →</a></li>
+  </ul>
+
   <h2>자주 묻는 질문</h2>
   <div class="faq-item">
     <p class="q">Q. 업로드한 사진이 서버에 저장되나요?</p>
@@ -161,6 +191,14 @@
   <div class="faq-item">
     <p class="q">Q. 웹캠은 왜 접근 권한을 요청하나요?</p>
     <p class="a">A. 실시간으로 화면을 분석해 결과를 보여주기 위한 용도이며, 촬영된 영상은 저장되지 않고 분석 즉시 폐기됩니다.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Q. '모델 로드 실패'라고 나와요.</p>
+    <p class="a">A. AI 모델 파일을 불러오지 못한 경우입니다. 네트워크 연결을 확인하고 페이지를 새로고침해 주세요. 광고 차단 프로그램이나 회사·학교 네트워크가 외부 스크립트를 막고 있을 때도 발생할 수 있습니다.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Q. 다른 사람의 사진을 올려도 되나요?</p>
+    <p class="a">A. 본인의 사진이나 동의를 받은 사진만 사용해 주세요. 타인의 사진을 동의 없이 사용하거나 결과로 놀리는 행위는 <a href="terms.html">이용약관</a>상 금지됩니다.</p>
   </div>
 </div>
 
