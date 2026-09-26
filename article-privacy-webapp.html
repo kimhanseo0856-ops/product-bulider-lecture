@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-adsense-account" content="ca-pub-9933027289167186">
+<meta name="description" content="사진을 올리는 테스트가 안전한지 스스로 점검하는 방법과, 개인정보를 지키며 온라인 콘텐츠를 즐기는 습관을 소개합니다.">
+<link rel="canonical" href="https://kimhanseo0856-ops.github.io/product-bulider-lecture/article-privacy-webapp.html">
+<title>내 사진은 어디로 갈까? 브라우저 안에서만 동작하는 웹앱 확인법 | Product Builder Lecture</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9933027289167186"
+     crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"내 사진은 어디로 갈까? 브라우저 안에서만 동작하는 웹앱 확인법","description":"사진을 올리는 테스트가 안전한지 스스로 점검하는 방법과, 개인정보를 지키며 온라인 콘텐츠를 즐기는 습관을 소개합니다.","datePublished":"2026-09-26","author":{"@type":"Organization","name":"Product Builder Lecture"},"mainEntityOfPage":"https://kimhanseo0856-ops.github.io/product-bulider-lecture/article-privacy-webapp.html"}</script>
+<style>
+  :root { --bg:#f4f6fb; --card-bg:#fff; --text:#222; --sub:#555; --note:#888; --shadow:rgba(0,0,0,.08); --btn-bg:#4f6df5; --btn-text:#fff; --toggle-bg:#e8eaf3; --toggle-text:#444; --panel-bg:#f7f8fc; --panel-border:#dfe3ee; }
+  :root[data-theme="dark"] { --bg:#14161f; --card-bg:#1e2130; --text:#eee; --sub:#b4b8cc; --note:#8b8fa6; --shadow:rgba(0,0,0,.4); --btn-bg:#6c86ff; --btn-text:#fff; --toggle-bg:#2a2e42; --toggle-text:#ddd; --panel-bg:#262a3d; --panel-border:#383d57; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center; gap:24px; padding:24px 0 40px; background:var(--bg); font-family:'Pretendard','Noto Sans KR',sans-serif; color:var(--text); transition:background .2s,color .2s; }
+  .topbar { width:92%; max-width:760px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand { font-weight:800; font-size:16px; color:var(--text); text-decoration:none; }
+  .topnav { display:flex; flex-wrap:wrap; gap:4px 14px; }
+  .topnav a { font-size:13px; color:var(--sub); text-decoration:none; }
+  .topnav a:hover { color:var(--btn-bg); }
+  #theme-toggle { width:38px; height:38px; flex:none; border-radius:50%; border:0; background:var(--toggle-bg); color:var(--toggle-text); font-size:17px; cursor:pointer; }
+  .card { background:var(--card-bg); width:92%; max-width:760px; padding:36px 32px; border-radius:20px; box-shadow:0 12px 40px var(--shadow); transition:background .2s,box-shadow .2s; }
+  .crumb { font-size:12px; color:var(--note); margin:0 0 10px; }
+  .crumb a { color:var(--btn-bg); text-decoration:none; }
+  .badge { display:inline-block; font-size:12px; font-weight:700; color:var(--btn-bg); background:var(--panel-bg); padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  h1 { margin:0 0 10px; font-size:26px; line-height:1.4; }
+  .meta { font-size:12px; color:var(--note); margin:0 0 24px; }
+  h2 { font-size:19px; margin:32px 0 10px; line-height:1.45; }
+  p { font-size:15.5px; line-height:1.85; color:var(--sub); margin:0 0 14px; }
+  ul, ol { margin:0 0 14px; padding-left:22px; }
+  li { font-size:15.5px; line-height:1.8; color:var(--sub); margin-bottom:6px; }
+  .tip { background:var(--panel-bg); border-left:4px solid var(--btn-bg); border-radius:8px; padding:12px 16px; margin:16px 0; font-size:14.5px; line-height:1.75; color:var(--text); }
+  .cta { display:inline-block; margin-top:8px; background:var(--btn-bg); color:var(--btn-text); text-decoration:none; font-weight:700; font-size:15px; padding:13px 26px; border-radius:12px; }
+  .related h2 { margin-top:0; }
+  .rel-list { list-style:none; padding:0; margin:0; }
+  .rel-list li { margin:0; border-top:1px solid var(--panel-border); }
+  .rel-list a { display:block; padding:12px 2px; color:var(--text); text-decoration:none; font-size:15px; font-weight:600; }
+  .rel-list a:hover { color:var(--btn-bg); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; margin-top:20px; }
+  .item { display:block; background:var(--panel-bg); border:1px solid var(--panel-border); border-radius:14px; padding:18px; text-decoration:none; transition:transform .15s,border-color .15s; }
+  .item:hover { transform:translateY(-2px); border-color:var(--btn-bg); }
+  .item .badge { margin-bottom:8px; background:var(--card-bg); }
+  .item h3 { margin:0 0 8px; font-size:16px; line-height:1.5; color:var(--text); }
+  .item p { margin:0; font-size:13.5px; line-height:1.65; }
+  .site-footer { text-align:center; }
+  .footer-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; margin-bottom:8px; }
+  .footer-nav a { color:var(--sub); font-size:13px; text-decoration:none; }
+  .footer-nav a:hover { color:var(--btn-bg); }
+  .footer-copy { font-size:12px; color:var(--note); margin:0; }
+  @media (max-width:520px) { .card { padding:28px 20px; } h1 { font-size:22px; } .topnav { display:none; } }
+</style>
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html">🎯 Product Builder Lecture</a>
+  <nav class="topnav">
+    <a href="index.html">이상형 테스트</a>
+    <a href="animal-test.html">동물상 테스트</a>
+    <a href="articles.html">읽을거리</a>
+    <a href="about.html">소개</a>
+  </nav>
+  <button id="theme-toggle" aria-label="다크모드 전환">🌙</button>
+</header>
+
+<article class="card">
+  <p class="crumb"><a href="index.html">홈</a> › <a href="articles.html">읽을거리</a> › AI 이야기</p>
+  <span class="badge">AI 이야기</span>
+  <h1>내 사진은 어디로 갈까? 브라우저 안에서만 동작하는 웹앱 확인법</h1>
+  <p class="meta">Product Builder Lecture 운영자 · 게시 2026-09-26</p>
+  <p>사진을 올리는 테스트가 안전한지 스스로 점검하는 방법과, 개인정보를 지키며 온라인 콘텐츠를 즐기는 습관을 소개합니다.</p>
+  <h2>사진을 올리는 서비스, 불안한 게 당연하다</h2>
+  <p>얼굴 사진을 올려야 하는 온라인 테스트는 재미있지만, &#x27;이 사진이 어디에 저장되는 걸까?&#x27;라는 걱정도 함께 듭니다. 실제로 일부 서비스는 사진을 서버에 저장하거나 다른 목적으로 활용하기도 합니다. 그래서 서비스가 사진을 어떻게 처리하는지 스스로 확인할 수 있는 기본 방법을 알아 두면 좋습니다.</p>
+  <h2>서버 처리와 브라우저 처리의 차이</h2>
+  <ul>
+    <li>서버 처리: 사진이 인터넷을 통해 운영자의 서버로 전송되고, 서버에서 분석한 뒤 결과를 돌려줍니다. 이 경우 사진이 서버에 남을 수 있으므로 처리방침을 꼼꼼히 확인해야 합니다.</li>
+    <li>브라우저 처리(클라이언트 사이드): 분석 프로그램(모델)을 내 기기로 내려받고, 사진은 내 기기 안에서만 분석합니다. 사진 자체는 외부로 전송되지 않습니다.</li>
+  </ul>
+  <p>동물상 테스트는 두 번째 방식입니다. 처음 페이지를 열 때 분석 모델 파일을 내려받고, 이후 사진 분석은 사용자의 기기에서 이루어집니다.</p>
+  <h2>직접 확인하는 방법: 개발자 도구의 네트워크 탭</h2>
+  <p>전문 지식이 없어도 브라우저의 개발자 도구로 어떤 데이터가 오가는지 눈으로 확인할 수 있습니다.</p>
+  <ol>
+    <li>테스트 페이지를 열고 키보드에서 F12를 눌러 개발자 도구를 엽니다.</li>
+    <li>&#x27;네트워크(Network)&#x27; 탭을 선택하고, 목록을 한 번 비웁니다.</li>
+    <li>사진을 올리고 결과 확인 버튼을 누릅니다.</li>
+    <li>새로 생기는 요청 목록을 살펴보세요. 사진 파일이 담긴 대용량 업로드 요청(POST)이 없다면 사진이 서버로 전송되지 않았다는 강력한 단서가 됩니다.</li>
+  </ol>
+  <div class="tip">💡 확인이 어렵다면 서비스의 개인정보처리방침에 &#x27;사진을 저장하지 않는다&#x27;는 내용이 명시되어 있는지 살펴보는 것만으로도 큰 도움이 됩니다.</div>
+  <h2>개인정보를 지키는 온라인 습관</h2>
+  <ul>
+    <li>꼭 필요한 정보만 입력하세요. 재미 테스트에 실명, 전화번호, 주소를 요구한다면 의심해 보세요.</li>
+    <li>사진에 위치 정보(EXIF)가 포함될 수 있습니다. 공유용 사진은 위치 정보를 제거하는 편이 안전합니다.</li>
+    <li>공용 컴퓨터에서는 사용 후 로그아웃하고 브라우저 기록을 정리하세요.</li>
+    <li>타인이 찍힌 사진은 상대의 동의 없이 올리지 마세요.</li>
+    <li>결과를 SNS에 공유할 때는 결과 이미지에 개인정보가 포함되지 않았는지 확인하세요.</li>
+  </ul>
+  <h2>Product Builder Lecture의 원칙</h2>
+  <p>우리 사이트는 사용자가 올린 사진과 답변을 서버에 저장하지 않는다는 원칙을 지킵니다. 다만 광고(Google AdSense)와 댓글(Disqus), 문의 폼(Formspree) 같은 외부 서비스는 각자의 방침에 따라 쿠키나 정보를 처리할 수 있으므로, 이에 대해서는 개인정보처리방침에서 자세히 안내하고 있습니다.</p>
+  <h2>바로 해 보기</h2>
+  <p>글에서 다룬 내용을 직접 체험해 보고 싶다면 아래 테스트를 이용해 보세요. 모든 테스트는 재미를 위한 콘텐츠이며 결과는 브라우저에서만 계산됩니다.</p>
+  <a class="cta" href="privacy.html">🔒 개인정보처리방침 확인하기</a>
+</article>
+
+<section class="card related">
+  <h2>함께 읽으면 좋은 글</h2>
+  <ul class="rel-list">
+    <li><a href="article-self-understanding.html">나를 이해하는 다섯 가지 습관</a></li>
+    <li><a href="article-healthy-relationship.html">건강한 관계를 만드는 다섯 가지 기준</a></li>
+    <li><a href="article-personality-quiz.html">심리 테스트는 어떻게 만들어질까? 재미와 한계 이해하기</a></li>
+  </ul>
+</section>
+
+<footer class="site-footer">
+  <nav class="footer-nav">
+    <a href="index.html">홈</a>
+    <a href="animal-test.html">동물상 테스트</a>
+    <a href="articles.html">읽을거리</a>
+    <a href="about.html">사이트 소개</a>
+    <a href="contact.html">제휴 문의</a>
+    <a href="terms.html">이용약관</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </nav>
+  <p class="footer-copy">© 2026 Product Builder Lecture</p>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('theme-toggle');
+  function applyThemeIcon() { themeToggle.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme', 'dark');
+    try { localStorage.setItem('theme', isDark ? 'light' : 'dark'); } catch (e) {}
+    applyThemeIcon();
+  });
+</script>
+</body>
+</html>

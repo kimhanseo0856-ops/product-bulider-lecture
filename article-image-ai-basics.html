@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-adsense-account" content="ca-pub-9933027289167186">
+<meta name="description" content="사진을 보고 강아지상인지 고양이상인지 맞히는 AI가 어떻게 학습하고 예측하는지, 비전문가도 이해할 수 있게 설명합니다.">
+<link rel="canonical" href="https://kimhanseo0856-ops.github.io/product-bulider-lecture/article-image-ai-basics.html">
+<title>이미지 분류 AI의 원리: Teachable Machine 쉽게 이해하기 | Product Builder Lecture</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9933027289167186"
+     crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"이미지 분류 AI의 원리: Teachable Machine 쉽게 이해하기","description":"사진을 보고 강아지상인지 고양이상인지 맞히는 AI가 어떻게 학습하고 예측하는지, 비전문가도 이해할 수 있게 설명합니다.","datePublished":"2026-09-26","author":{"@type":"Organization","name":"Product Builder Lecture"},"mainEntityOfPage":"https://kimhanseo0856-ops.github.io/product-bulider-lecture/article-image-ai-basics.html"}</script>
+<style>
+  :root { --bg:#f4f6fb; --card-bg:#fff; --text:#222; --sub:#555; --note:#888; --shadow:rgba(0,0,0,.08); --btn-bg:#4f6df5; --btn-text:#fff; --toggle-bg:#e8eaf3; --toggle-text:#444; --panel-bg:#f7f8fc; --panel-border:#dfe3ee; }
+  :root[data-theme="dark"] { --bg:#14161f; --card-bg:#1e2130; --text:#eee; --sub:#b4b8cc; --note:#8b8fa6; --shadow:rgba(0,0,0,.4); --btn-bg:#6c86ff; --btn-text:#fff; --toggle-bg:#2a2e42; --toggle-text:#ddd; --panel-bg:#262a3d; --panel-border:#383d57; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center; gap:24px; padding:24px 0 40px; background:var(--bg); font-family:'Pretendard','Noto Sans KR',sans-serif; color:var(--text); transition:background .2s,color .2s; }
+  .topbar { width:92%; max-width:760px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand { font-weight:800; font-size:16px; color:var(--text); text-decoration:none; }
+  .topnav { display:flex; flex-wrap:wrap; gap:4px 14px; }
+  .topnav a { font-size:13px; color:var(--sub); text-decoration:none; }
+  .topnav a:hover { color:var(--btn-bg); }
+  #theme-toggle { width:38px; height:38px; flex:none; border-radius:50%; border:0; background:var(--toggle-bg); color:var(--toggle-text); font-size:17px; cursor:pointer; }
+  .card { background:var(--card-bg); width:92%; max-width:760px; padding:36px 32px; border-radius:20px; box-shadow:0 12px 40px var(--shadow); transition:background .2s,box-shadow .2s; }
+  .crumb { font-size:12px; color:var(--note); margin:0 0 10px; }
+  .crumb a { color:var(--btn-bg); text-decoration:none; }
+  .badge { display:inline-block; font-size:12px; font-weight:700; color:var(--btn-bg); background:var(--panel-bg); padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  h1 { margin:0 0 10px; font-size:26px; line-height:1.4; }
+  .meta { font-size:12px; color:var(--note); margin:0 0 24px; }
+  h2 { font-size:19px; margin:32px 0 10px; line-height:1.45; }
+  p { font-size:15.5px; line-height:1.85; color:var(--sub); margin:0 0 14px; }
+  ul, ol { margin:0 0 14px; padding-left:22px; }
+  li { font-size:15.5px; line-height:1.8; color:var(--sub); margin-bottom:6px; }
+  .tip { background:var(--panel-bg); border-left:4px solid var(--btn-bg); border-radius:8px; padding:12px 16px; margin:16px 0; font-size:14.5px; line-height:1.75; color:var(--text); }
+  .cta { display:inline-block; margin-top:8px; background:var(--btn-bg); color:var(--btn-text); text-decoration:none; font-weight:700; font-size:15px; padding:13px 26px; border-radius:12px; }
+  .related h2 { margin-top:0; }
+  .rel-list { list-style:none; padding:0; margin:0; }
+  .rel-list li { margin:0; border-top:1px solid var(--panel-border); }
+  .rel-list a { display:block; padding:12px 2px; color:var(--text); text-decoration:none; font-size:15px; font-weight:600; }
+  .rel-list a:hover { color:var(--btn-bg); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; margin-top:20px; }
+  .item { display:block; background:var(--panel-bg); border:1px solid var(--panel-border); border-radius:14px; padding:18px; text-decoration:none; transition:transform .15s,border-color .15s; }
+  .item:hover { transform:translateY(-2px); border-color:var(--btn-bg); }
+  .item .badge { margin-bottom:8px; background:var(--card-bg); }
+  .item h3 { margin:0 0 8px; font-size:16px; line-height:1.5; color:var(--text); }
+  .item p { margin:0; font-size:13.5px; line-height:1.65; }
+  .site-footer { text-align:center; }
+  .footer-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; margin-bottom:8px; }
+  .footer-nav a { color:var(--sub); font-size:13px; text-decoration:none; }
+  .footer-nav a:hover { color:var(--btn-bg); }
+  .footer-copy { font-size:12px; color:var(--note); margin:0; }
+  @media (max-width:520px) { .card { padding:28px 20px; } h1 { font-size:22px; } .topnav { display:none; } }
+</style>
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html">🎯 Product Builder Lecture</a>
+  <nav class="topnav">
+    <a href="index.html">이상형 테스트</a>
+    <a href="animal-test.html">동물상 테스트</a>
+    <a href="articles.html">읽을거리</a>
+    <a href="about.html">소개</a>
+  </nav>
+  <button id="theme-toggle" aria-label="다크모드 전환">🌙</button>
+</header>
+
+<article class="card">
+  <p class="crumb"><a href="index.html">홈</a> › <a href="articles.html">읽을거리</a> › AI 이야기</p>
+  <span class="badge">AI 이야기</span>
+  <h1>이미지 분류 AI의 원리: Teachable Machine 쉽게 이해하기</h1>
+  <p class="meta">Product Builder Lecture 운영자 · 게시 2026-09-26</p>
+  <p>사진을 보고 강아지상인지 고양이상인지 맞히는 AI가 어떻게 학습하고 예측하는지, 비전문가도 이해할 수 있게 설명합니다.</p>
+  <h2>이미지 분류란?</h2>
+  <p>이미지 분류는 사진을 보고 &#x27;이 사진은 어떤 종류인가?&#x27;를 알아맞히는 AI 기술입니다. 사진이 개인지 고양이인지, 꽃인지 자동차인지를 구분하는 것처럼 사람에게는 쉬운 일이 컴퓨터에게는 오랫동안 어려운 과제였습니다. 컴퓨터가 보는 사진은 수많은 숫자(픽셀 값)의 배열일 뿐이기 때문입니다. 최근 딥러닝이 발전하면서 이 분야의 정확도가 크게 높아졌습니다.</p>
+  <h2>AI는 어떻게 배울까? 학습의 세 단계</h2>
+  <ol>
+    <li>예시 모으기: 강아지 사진 여러 장과 고양이 사진 여러 장을 &#x27;이것은 강아지&#x27;, &#x27;이것은 고양이&#x27;라는 이름표(라벨)와 함께 준비합니다.</li>
+    <li>패턴 학습하기: AI는 사진 속 숫자 패턴에서 각 이름표와 관련된 특징(윤곽, 질감, 색의 분포 등)을 스스로 찾아내도록 반복해서 조정됩니다.</li>
+    <li>새 사진 예측하기: 학습이 끝나면 처음 보는 사진을 넣었을 때 각 이름표에 얼마나 가까운지를 확률로 계산해 결과를 보여 줍니다.</li>
+  </ol>
+  <p>결과에 표시되는 &#x27;73%&#x27; 같은 숫자는 정답일 확률이 아니라, 학습된 예시들과 비교했을 때 &#x27;얼마나 그 이름표에 가깝게 보이는가&#x27;에 대한 모델의 신뢰 정도로 이해하는 것이 정확합니다.</p>
+  <h2>Teachable Machine이 특별한 이유</h2>
+  <p>Teachable Machine은 구글이 공개한 웹 기반 도구로, 코딩 없이 브라우저에서 이미지·소리·자세를 학습시킬 수 있게 해 줍니다. 내부적으로는 이미 대규모 데이터로 학습된 모델(예: MobileNet)의 지식을 활용하고, 사용자가 올린 소수의 예시로 마지막 부분만 다시 학습시키는 &#x27;전이 학습(transfer learning)&#x27; 방식을 사용합니다. 덕분에 수십 장 정도의 사진만으로도 그럴듯한 분류기를 빠르게 만들 수 있습니다.</p>
+  <p>학습된 모델은 TensorFlow.js라는 자바스크립트 라이브러리를 통해 웹 페이지에서 바로 실행할 수 있습니다. 즉 서버에 사진을 보내지 않고도 사용자의 기기 안에서 예측을 계산할 수 있다는 뜻입니다.</p>
+  <h2>AI 결과가 틀릴 수 있는 이유</h2>
+  <ul>
+    <li>학습 데이터가 적거나 한쪽에 치우쳐 있으면 새로운 사진에서 오판하기 쉽습니다.</li>
+    <li>조명, 각도, 배경, 화질이 학습 때와 많이 다르면 예측이 흔들립니다.</li>
+    <li>&#x27;강아지상&#x27;과 &#x27;고양이상&#x27;은 명확한 정답이 있는 분류가 아니라 사람들의 주관적 인상이어서 기준 자체가 모호합니다.</li>
+    <li>AI는 이유를 설명하지 못하고 패턴을 따를 뿐이라서 사람이 납득할 만한 근거 없이 결과가 나오기도 합니다.</li>
+  </ul>
+  <div class="tip">💡 그래서 동물상 테스트의 결과는 &#x27;재미로 보는 AI의 인상 평가&#x27;일 뿐, 실제 성격이나 외모를 판단하는 도구가 아닙니다.</div>
+  <h2>직접 해 보면 이해가 쉽다</h2>
+  <p>같은 사람의 사진이라도 정면 사진, 웃는 사진, 옆모습 사진을 각각 넣어 보세요. 결과가 어떻게 달라지는지 관찰하면 AI가 무엇에 반응하는지 감을 잡을 수 있습니다. 이런 경험은 AI가 마법이 아니라 &#x27;데이터에서 배운 패턴 맞추기&#x27;라는 점을 체감하게 해 주며, 일상에서 만나는 AI 서비스를 비판적으로 이해하는 데에도 도움이 됩니다.</p>
+  <h2>바로 해 보기</h2>
+  <p>글에서 다룬 내용을 직접 체험해 보고 싶다면 아래 테스트를 이용해 보세요. 모든 테스트는 재미를 위한 콘텐츠이며 결과는 브라우저에서만 계산됩니다.</p>
+  <a class="cta" href="animal-test.html">🐶🐱 이미지 분류 AI 직접 체험하기</a>
+</article>
+
+<section class="card related">
+  <h2>함께 읽으면 좋은 글</h2>
+  <ul class="rel-list">
+    <li><a href="article-privacy-webapp.html">내 사진은 어디로 갈까? 브라우저 안에서만 동작하는 웹앱 확인법</a></li>
+    <li><a href="article-self-understanding.html">나를 이해하는 다섯 가지 습관</a></li>
+    <li><a href="article-healthy-relationship.html">건강한 관계를 만드는 다섯 가지 기준</a></li>
+  </ul>
+</section>
+
+<footer class="site-footer">
+  <nav class="footer-nav">
+    <a href="index.html">홈</a>
+    <a href="animal-test.html">동물상 테스트</a>
+    <a href="articles.html">읽을거리</a>
+    <a href="about.html">사이트 소개</a>
+    <a href="contact.html">제휴 문의</a>
+    <a href="terms.html">이용약관</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </nav>
+  <p class="footer-copy">© 2026 Product Builder Lecture</p>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('theme-toggle');
+  function applyThemeIcon() { themeToggle.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme', 'dark');
+    try { localStorage.setItem('theme', isDark ? 'light' : 'dark'); } catch (e) {}
+    applyThemeIcon();
+  });
+</script>
+</body>
+</html>
